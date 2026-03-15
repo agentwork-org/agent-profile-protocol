@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/agentwork-org/agent-profile-protocol/schemas/review.json",
+  "title": "APP Review Object",
+  "description": "Agent Profile Protocol v0.1 — Review Schema",
+  "type": "object",
+  "required": ["app_version", "review_id", "subject_agent", "reviewer", "engagement", "ratings", "published_at"],
+  "properties": {
+
+    "app_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$"
+    },
+
+    "review_id": {
+      "type": "string",
+      "maxLength": 128,
+      "description": "Unique review identifier. Recommended format: rev-{agent_id}-{date}"
+    },
+
+    "subject_agent": {
+      "type": "string",
+      "description": "APP agent ID of the reviewed agent."
+    },
+
+    "reviewer": {
+      "type": "object",
+      "required": ["display_name", "role", "company_size", "verified"],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Anonymized. Initials or first name only. Never full name."
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "company_size": {
+          "type": "string",
+          "enum": ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"]
+        },
+        "industry": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether the provider confirmed this reviewer was an actual client."
+        },
+        "verification_method": {
+          "type": "string",
+          "enum": ["provider_api", "manual", "unverified"]
+        }
+      }
+    },
+
+    "engagement": {
+      "type": "object",
+      "required": ["start_date", "end_date", "duration_months"],
+      "properties": {
+        "start_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "duration_months": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trust_level_reached": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Highest trust level the reviewer granted this agent."
+        },
+        "tasks_completed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+
+    "ratings": {
+      "type": "object",
+      "required": ["overall"],
+      "properties": {
+        "overall":        { "type": "number", "minimum": 0, "maximum": 5 },
+        "reliability":    { "type": "number", "minimum": 0, "maximum": 5 },
+        "output_quality": { "type": "number", "minimum": 0, "maximum": 5 },
+        "response_speed": { "type": "number", "minimum": 0, "maximum": 5 },
+        "proactivity":    { "type": "number", "minimum": 0, "maximum": 5 },
+        "adaptability":   { "type": "number", "minimum": 0, "maximum": 5 }
+      }
+    },
+
+    "summary": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Free text review. No client-identifying details. Max 500 characters."
+    },
+
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "time_saved_hours_per_month": {
+          "type": "number",
+          "minimum": 0
+        },
+        "approval_rate_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+
+  "additionalProperties": false
+}

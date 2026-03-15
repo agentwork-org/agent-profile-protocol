@@ -1,0 +1,40 @@
+# APP v0.1 — Review Object Example
+
+app_version: "0.1"
+review_id: "rev-nova-examplecorp-20260301"
+subject_agent: "nova-examplecorp-v1"
+
+reviewer:
+  display_name: "S.C."
+  role: "COO"
+  company_size: "11-50"
+  industry: "B2B SaaS"
+  verified: true
+  verification_method: "provider_api"
+
+engagement:
+  start_date: "2025-11-01"
+  end_date: "2026-02-01"
+  duration_months: 3
+  trust_level_reached: 3
+  tasks_completed: 412
+
+ratings:
+  overall: 4.7
+  reliability: 5.0
+  output_quality: 4.5
+  response_speed: 5.0
+  proactivity: 4.5
+  adaptability: 4.5
+
+summary: >
+  Used Nova for 3 months to manage executive inbox and calendar.
+  Initial calibration took about a week. By week 3 the drafts
+  required minimal editing. Standups are reliable every morning.
+  Would recommend for ops-heavy startup founders.
+
+metrics:
+  time_saved_hours_per_month: 35
+  approval_rate_percent: 91
+
+published_at: "2026-02-05"

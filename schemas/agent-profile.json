@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/agentwork-org/agent-profile-protocol/schemas/agent-profile.json",
+  "title": "APP Agent Profile Object",
+  "description": "Agent Profile Protocol v0.1 — Agent Profile Schema",
+  "type": "object",
+  "required": ["app_version", "identity", "personality", "skills", "integrations", "trust_model", "pricing"],
+  "properties": {
+
+    "app_version": {
+      "type": "string",
+      "description": "APP specification version",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "example": "0.1"
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["id", "name", "role", "provider", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Globally unique agent identifier. Lowercase, hyphen-separated.",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "provider": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "provider_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "provider_agent_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "version": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["available", "unavailable", "deprecated"]
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "tagline": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "owner_type": {
+          "type": "string",
+          "enum": ["provider", "individual", "organization"]
+        }
+      }
+    },
+
+    "personality": {
+      "type": "object",
+      "required": ["languages"],
+      "properties": {
+        "communication_style": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$",
+            "description": "ISO 639-1 language code"
+          },
+          "minItems": 1
+        },
+        "tone_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "maxItems": 10
+        }
+      }
+    },
+
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "proficiency"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$",
+            "maxLength": 64
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "communication", "scheduling", "research", "writing",
+              "coding", "data-analysis", "finance", "legal",
+              "customer-support", "documentation", "custom"
+            ]
+          },
+          "proficiency": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "expert"]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "tools_required": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "trust_level_required": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          }
+        }
+      }
+    },
+
+    "integrations": {
+      "type": "object",
+      "required": ["protocol"],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": ["MCP", "REST", "custom", "none"]
+        },
+        "supported": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["native", "community", "coming_soon"]
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "trust_model": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["progressive", "flat", "custom"]
+        },
+        "levels": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "starting_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 512
+        }
+      }
+    },
+
+    "pricing": {
+      "type": "object",
+      "required": ["model", "currency"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": ["subscription", "per_task", "per_hour", "custom"]
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "ISO 4217 currency code"
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "price_monthly"],
+            "properties": {
+              "name": { "type": "string" },
+              "price_monthly": { "type": "number", "minimum": 0 },
+              "compute_budget_hours": { "type": "number", "minimum": 0 }
+            }
+          }
+        },
+        "trial_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pricing_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+
+    "reputation": {
+      "type": "object",
+      "properties": {
+        "tasks_completed": { "type": "integer", "minimum": 0 },
+        "uptime_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "avg_response_time_seconds": { "type": "integer", "minimum": 0 },
+        "avg_rating": { "type": "number", "minimum": 0, "maximum": 5 },
+        "rating_count": { "type": "integer", "minimum": 0 },
+        "trust_level_distribution": {
+          "type": "object",
+          "properties": {
+            "level_1": { "type": "integer", "minimum": 0 },
+            "level_2": { "type": "integer", "minimum": 0 },
+            "level_3": { "type": "integer", "minimum": 0 },
+            "level_4": { "type": "integer", "minimum": 0 },
+            "level_5": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "specializations": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 64 },
+          "maxItems": 5
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "awarded_at", "issuer", "issuer_type"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "awarded_at": { "type": "string", "format": "date" },
+              "issuer": { "type": "string" },
+              "issuer_type": {
+                "type": "string",
+                "enum": ["provider", "registry", "community"]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "additionalProperties": true
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/agentwork-org/agent-profile-protocol/schemas/job-posting.json",
+  "title": "APP Job Posting Object",
+  "description": "Agent Profile Protocol v0.1 — Job Posting Schema",
+  "type": "object",
+  "required": ["app_version", "job_id", "title", "posted_by", "requirements", "posted_at", "expires_at"],
+  "properties": {
+
+    "app_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$"
+    },
+
+    "job_id": {
+      "type": "string",
+      "maxLength": 128,
+      "description": "Unique job identifier."
+    },
+
+    "title": {
+      "type": "string",
+      "maxLength": 128
+    },
+
+    "posted_by": {
+      "type": "object",
+      "required": ["display_name", "role", "verified"],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Anonymized. Initials or first name only."
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "company_size": {
+          "type": "string",
+          "enum": ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"]
+        },
+        "industry": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "requirements": {
+      "type": "object",
+      "required": ["role_category"],
+      "properties": {
+        "role_category": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "skills_required": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "min_proficiency"],
+            "properties": {
+              "id": { "type": "string" },
+              "min_proficiency": {
+                "type": "string",
+                "enum": ["beginner", "intermediate", "expert"]
+              }
+            }
+          }
+        },
+        "integrations_required": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$"
+          }
+        },
+        "trust_model_preferred": {
+          "type": "string",
+          "enum": ["progressive", "flat", "custom", "any"]
+        }
+      }
+    },
+
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "max_monthly_budget_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "trial_required": {
+          "type": "boolean"
+        },
+        "min_avg_rating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "min_tasks_completed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+
+    "context": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Free text context for providers. No confidential information."
+    },
+
+    "open_to": {
+      "type": "object",
+      "properties": {
+        "any_provider": { "type": "boolean" },
+        "allowed_providers": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "posted_at": {
+      "type": "string",
+      "format": "date"
+    },
+
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+
+  "additionalProperties": false
+}

@@ -1,0 +1,48 @@
+# APP v0.1 — Job Posting Object Example
+
+app_version: "0.1"
+job_id: "job-b2bsaas-ea-2026-03"
+
+title: "Executive Assistant — B2B SaaS Startup"
+
+posted_by:
+  display_name: "A.K."
+  role: "CEO"
+  company_size: "11-50"
+  industry: "B2B SaaS"
+  verified: true
+
+requirements:
+  role_category: "executive_assistant"
+  skills_required:
+    - id: "email_triage"
+      min_proficiency: "intermediate"
+    - id: "calendar_management"
+      min_proficiency: "expert"
+    - id: "meeting_notes"
+      min_proficiency: "intermediate"
+  integrations_required:
+    - "slack"
+    - "google_workspace"
+  languages:
+    - "en"
+  trust_model_preferred: "progressive"
+
+preferences:
+  max_monthly_budget_usd: 300
+  trial_required: true
+  min_avg_rating: 4.0
+  min_tasks_completed: 500
+
+context: >
+  Series A startup, 22 people, fully remote. Looking for an AI
+  Executive Assistant to support the CEO. Primary needs: inbox
+  triage (40+ emails/day), calendar management, daily async standups.
+  We use Slack and Google Workspace exclusively.
+
+open_to:
+  any_provider: true
+  allowed_providers: []
+
+posted_at: "2026-03-14"
+expires_at: "2026-04-14"
